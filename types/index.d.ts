@@ -8,6 +8,9 @@ export interface ReactGetSetState<T> {
     setState: (newState: T) => void;
 }
 
+/**
+ * A generic interface for a feed item.
+ */
 export interface IFeedsFetch {
     id: string;
     uid: string;
@@ -19,3 +22,13 @@ export interface IFeedsFetch {
     updated: string;
 }
 
+/**
+ * A generic interface for a user registration.
+ */
+interface IUserRegister {
+    username: string;
+    email: string;
+    password: string;
+    passwordConfirm: string;
+    avatarURL: string;
+}

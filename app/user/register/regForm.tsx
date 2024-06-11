@@ -1,46 +1,35 @@
 "use client"
 import { Main } from '@/components/Frames';
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { BiUser } from 'react-icons/bi';
+import { Register } from '@/lib/user';
+import { IUserRegister } from '@/types';
+import { toBase64 } from '@/utils/toBase64';
 
 const inputStyle = "border-2 border-gray-300 rounded-md p-2 outline-none focus:border-themeColor";
 
-export const RegForm = (props: { submitAction: Function }) => {
-    const { register, setValue, handleSubmit, formState: { errors }, watch } = useForm();
+export const RegForm = () => {
+    const { register, setValue, handleSubmit, formState: { errors }, watch } = useForm<IUserRegister>();
+    // const [formState, setFormState] = useFormState<FormFields>();
+
+    const onSubmit: SubmitHandler<IUserRegister> = async (data) => {
+        Register(data);
+        console.log(data);
+    };
 
     // For user avatar input.
     const fileInputRef = React.createRef<HTMLInputElement>();
     const [m_avatarURL, setAvatarURL] = useState<string>();
     const [m_avatarUsrIconDisplay, setAvatarUsrIconDisplay] = useState<"hidden" | "">("");
 
-
-    const emptyFunc = (data: any) => {
-        return data;
-    }
-
     return (
         <Main>
             <form
-                onSubmit={handleSubmit((data) => {
-                    props.submitAction(data);
-                    console.log(data);
-                    console.log(data.avatar.type);
-                })}
+                onSubmit={handleSubmit(onSubmit)}
                 className={"flex flex-col gap-4 absolute top-10 justify-center"}>
 
-
-                {/* File Input */}
-                {/* <input
-                    type="file"
-                    accept="*.png"
-                    {...register("avatar")}
-                    ref={fileInputRef}>
-                </input> */}
-
-
                 {/* User Avatar */}
-
                 <div
                     className={"w-24 h-24 bg-themeColor rounded-full justify-center hover:cursor-pointer"}
                     onClick={() => { fileInputRef.current?.click() }}
@@ -59,7 +48,7 @@ export const RegForm = (props: { submitAction: Function }) => {
                         className={"hidden"}
                         type="file"
                         accept="*.png"
-                        {...register("avatar")}
+                        {...register("avatarURL")}
                         ref={fileInputRef}
                         onChangeCapture={(e: React.FormEvent<HTMLInputElement>) => {
                             let target = e.target as HTMLInputElement;
@@ -67,8 +56,7 @@ export const RegForm = (props: { submitAction: Function }) => {
                                 let fileObj = target.files[0];
                                 setAvatarURL(URL.createObjectURL(fileObj));
                                 setAvatarUsrIconDisplay("hidden");
-
-                                // setValue("avatar", fileObj);
+                                toBase64(fileObj).then((res: string) => { setValue("avatarURL", res) });
                             }
                         }}>
                     </input>
@@ -100,7 +88,7 @@ export const RegForm = (props: { submitAction: Function }) => {
                 {/* Password Confirm */}
                 <input
                     className={`${inputStyle} ${errors.passwordConfirm?.message && "border-alert-500"}`}
-                    placeholder={"PasswordConfirm"}
+                    placeholder={"Password Confirm"}
                     type="password"
                     {...register("passwordConfirm", { required: "You need to confirm your password." })}>
                 </input>
