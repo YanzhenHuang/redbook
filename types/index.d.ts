@@ -1,3 +1,12 @@
+/**
+ * A generic state management interface for React components.
+ * @member {T} state - The current state value.
+ * @member {(newState: T) => void} setState - A function to update the state.
+ */
+export interface ReactGetSetState<T> {
+    state: T;
+    setState: (newState: T) => void;
+}
 
 export interface IFeedsFetch {
     id: string;
@@ -9,3 +18,4 @@ export interface IFeedsFetch {
     created: string;
     updated: string;
 }
+
