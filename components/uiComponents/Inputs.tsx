@@ -1,7 +1,9 @@
 "use client"
 import React, { useState } from 'react';
 import { ReactGetSetState } from "@/types";
-import { FaUser } from "@react-icons/all-files/fa/FaUser";
+// import { FaUser } from "@react-icons/all-files/fa/FaUser";
+import { BiUser } from 'react-icons/bi';
+import { useForm } from 'react-hook-form';
 
 /**
  * A standardized input component for forms.
@@ -61,7 +63,10 @@ export const AvatarInput = (props: { setAvatar: (f: Blob) => void }) => {
             }}
             className="bg-themeColorUltraLight h-32 w-32 rounded-full hover:cursor-pointer">
 
-            <input type="file" ref={fileInputRef} className="hidden"
+            <input
+                type="file"
+                ref={fileInputRef}
+                className="hidden"
                 onChangeCapture={(e: React.FormEvent<HTMLInputElement>) => {
                     let target = e.target as HTMLInputElement;
                     if (target.files && target.files.length > 0) {
@@ -71,7 +76,7 @@ export const AvatarInput = (props: { setAvatar: (f: Blob) => void }) => {
                         setAvatarUsrIconDisplay("hidden");
                     }
                 }}></input>
-            <FaUser className={`w-full h-full p-10 text-white ${m_avatarUsrIconDisplay}`} />
+            <BiUser className={`w-full h-full p-10 text-white ${m_avatarUsrIconDisplay}`} />
         </div>
     );
 }
