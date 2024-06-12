@@ -1,10 +1,22 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { BiUser } from 'react-icons/bi';
 import { FieldError, UseFormRegister, UseFormSetValue, useForm } from 'react-hook-form';
 import { toBase64 } from '@/utils/toBase64';
 
 const inputStyle = "border-2 rounded-md p-2 outline-none focus:border-themeColor";
+
+const InputStyles = {
+    textInput: {
+        base: "border-2 rounded-md p-2 outline-none focus:border-themeColor",
+        e_err: "border-alertCritical",
+        e_idle: "border-gray-300",
+    },
+    label: {
+        e_idle: "text-gray-400 text-sm",
+        e_selected: "text-themeColor text-md font-bold",
+    }
+};
 
 /**
  * A standard text input that's been registered in a form using useForm().
@@ -26,16 +38,23 @@ export const TextInput = (
     }
 ) => {
     let { placeHolder, regName, type, requireText } = props.base;
+    let labelRef = React.createRef<HTMLDivElement>();
+    let [m_labelStyle, setLabelStyle] = useState<"text-gray-400 text-sm" | "text-themeColor text-md font-bold">("text-gray-400 text-sm");
 
     return (
-        <div>
-            <div className={"text-alertCritical text-sm"}>{props.thisErr?.message}</div>
+        <div className={"flex flex-col"}>
+            <div className={`${m_labelStyle} transition-all`} ref={labelRef}>
+                {placeHolder}
+            </div>
             <input
-                className={`${inputStyle} border-${props.thisErr ? "alertCritical" : "gray-300"}`}
+                className={`${inputStyle} ${props.thisErr ? InputStyles.textInput.e_err : InputStyles.textInput.e_idle}`}
                 placeholder={placeHolder}
                 type={type || "text"}
-                {...props.register(regName, { required: (requireText || `${placeHolder} is required.`) })}>
+                {...props.register(regName, { required: (requireText || `${placeHolder} is required.`) })}
+                onFocus={() => { setLabelStyle("text-themeColor text-md font-bold") }}
+                onBlur={() => { setLabelStyle("text-gray-400 text-sm") }}>
             </input>
+            <div className={"text-alertCritical text-sm"}>{props.thisErr?.message}</div>
         </div>
     );
 }
@@ -51,6 +70,7 @@ export const AvatarInput = (
     props: {
         base: {
             regName: string,
+            styles?: string
         },
         register: UseFormRegister<any>,
         setValue: UseFormSetValue<any>,
@@ -58,7 +78,7 @@ export const AvatarInput = (
     }
 ) => {
 
-    let { regName } = props.base;
+    let { regName, styles } = props.base;
 
     const fileInputRef = React.createRef<HTMLInputElement>();
     const [m_avatarURL, setAvatarURL] = useState<string>();
@@ -67,7 +87,7 @@ export const AvatarInput = (
     return (
         <div>
             <div
-                className={"w-24 h-24 bg-themeColor rounded-full justify-center hover:cursor-pointer m-auto"}
+                className={styles || "w-24 h-24 bg-themeColor rounded-full justify-center hover:cursor-pointer m-auto"}
                 onClick={() => { fileInputRef.current?.click() }}
                 style={{
                     backgroundImage: `url(${m_avatarURL})`,
