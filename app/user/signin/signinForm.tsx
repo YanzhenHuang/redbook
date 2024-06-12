@@ -3,12 +3,10 @@
 import { TextInput } from "@/components/uiComponents/Inputs";
 import { AuthWithPassword } from "@/lib/user";
 import { IUserAuthWihPassword } from "@/types";
-import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 export const SigninForm = () => {
     let { register, setValue, handleSubmit, formState: { errors } } = useForm<IUserAuthWihPassword>();
-    let router = useRouter();
 
     const onSubmit: SubmitHandler<IUserAuthWihPassword> = async (data) => {
         let res = await AuthWithPassword(data);
@@ -22,7 +20,7 @@ export const SigninForm = () => {
     return (
         <form
             onSubmit={handleSubmit(onSubmit)}
-            className={"flex flex-col gap-4 absolute top-10 justify-center"}>
+            className={"flex flex-col gap-4 top-10 justify-center"}>
 
             <TextInput
                 base={{ placeHolder: "User Name or Email", regName: "identity", }}

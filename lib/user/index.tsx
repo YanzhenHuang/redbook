@@ -1,6 +1,7 @@
 "use server"
 import { pb } from '@/lib/db_config';
 import { IPBErrData, IUserAuthWihPassword, IUserRegister } from '@/types';
+import { cookies } from 'next/headers';
 
 /**
  * Parse error messages into a loose list.
@@ -59,9 +60,16 @@ export const Register = async (data: IUserRegister): Promise<any | undefined> =>
 export const AuthWithPassword = async (data: IUserAuthWihPassword): Promise<any | undefined> => {
     try {
         const authData = await pb.collection('users').authWithPassword(data.identity, data.password);
+        pb.authStore.save(authData.token, authData.record);
         return authData;
+        // return pb.authStore.model;
     } catch (err: any) {
         let errMessages = ParseErrMsg(err) as string;
         return { errcode: err.data.code, message: errMessages } as IPBErrData;
     }
+}
+
+export const ConfirmVerification = async (data: any): Promise<any | undefined> => {
+    await pb.collection('users').confirmVerification(data.token);
+    await pb.collection('users').authRefresh();
 }
