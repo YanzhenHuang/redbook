@@ -82,7 +82,7 @@ export const AvatarInput = (
 
     const fileInputRef = React.createRef<HTMLInputElement>();
     const [m_avatarURL, setAvatarURL] = useState<string>();
-    const [m_avatarUsrIconDisplay, setAvatarUsrIconDisplay] = useState<"hidden" | "">("");
+    const [m_avatarUsrIconDisplay, setAvatarUsrIconDisplay] = useState<" hidden" | "">("");
 
     return (
         <div>
@@ -97,7 +97,7 @@ export const AvatarInput = (
                 }}>
 
                 {/* Default Icon */}
-                <BiUser className={`w-full h-full text-white p-8 text-2xl ${m_avatarUsrIconDisplay}`}></BiUser>
+                <BiUser className={`w-full h-full text-white p-8 text-2xl${m_avatarUsrIconDisplay}`}></BiUser>
 
                 {/* File Input */}
                 <input
@@ -111,7 +111,7 @@ export const AvatarInput = (
                         if (target.files && target.files.length > 0) {
                             let fileObj = target.files[0];
                             setAvatarURL(URL.createObjectURL(fileObj));
-                            setAvatarUsrIconDisplay("hidden");
+                            setAvatarUsrIconDisplay(" hidden");
                             toBase64(fileObj).then((res: string) => { props.setValue("avatarURL", res) });
                         }
                     }}>
