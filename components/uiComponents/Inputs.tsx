@@ -1,82 +1,103 @@
 "use client"
 import React, { useState } from 'react';
-import { ReactGetSetState } from "@/types";
-// import { FaUser } from "@react-icons/all-files/fa/FaUser";
 import { BiUser } from 'react-icons/bi';
-import { useForm } from 'react-hook-form';
+import { FieldError, UseFormRegister, UseFormSetValue, useForm } from 'react-hook-form';
+import { toBase64 } from '@/utils/toBase64';
+
+const inputStyle = "border-2 rounded-md p-2 outline-none focus:border-themeColor";
 
 /**
- * A standardized input component for forms.
- * @param props 
- * @prop {string} placeholder - The placeholder text for the input.
- * @prop {string} type - The type of input (e.g. "text", "email", "password").
- * @prop {string} name - The name of the input field.
- * @prop {ReactGetSetState<string>} state - The state object containing the current value of the input.
+ * A standard text input that's been registered in a form using useForm().
+ * @param props
+ * @prop {UseFormRegister<any>} register - The register function passed by the useForm() hook.
+ * @prop {FieldError | undefined} thisErr - The error message specifically for this input passed from the useForm() hook.
  * @returns 
  */
-export const FormInput = (props: { placeholder: string, type?: string, name: string, state: ReactGetSetState<string> }) => {
-    const inputStyles = "w-80 p-3 rounded-md border-2 border-gray focus:border-themeColor focus:outline-none";
-    const [labelColor, setLabelColor] = useState<"text-themeColor font-semibold scale-[1.02]" | "text-gray-400 font-medium">("text-gray-400 font-medium");
+export const TextInput = (
+    props: {
+        base: {
+            placeHolder: string,
+            regName: string,
+            type?: string,
+            requireText?: string
+        },
+        register: UseFormRegister<any>,
+        thisErr: FieldError | undefined
+    }
+) => {
+    let { placeHolder, regName, type, requireText } = props.base;
+
     return (
         <div>
-            <div className={`text-gray ${labelColor} text-sm pl-2 pb-0.5 transition-all `}>
-                <p>{props.placeholder}</p>
-            </div>
+            <div className={"text-alertCritical text-sm"}>{props.thisErr?.message}</div>
             <input
-                placeholder={props.placeholder}
-                type={props.type}
-                name={props.name}
-                className={inputStyles}
-                onChange={(e) => {
-                    props.state.setState(e.target.value);
-                }}
-
-                onFocusCapture={() => { setLabelColor("text-themeColor font-semibold scale-[1.02]") }}
-                onBlur={(e) => { setLabelColor("text-gray-400 font-medium") }}
-            ></input>
+                className={`${inputStyle} border-${props.thisErr ? "alertCritical" : "gray-300"}`}
+                placeholder={placeHolder}
+                type={type || "text"}
+                {...props.register(regName, { required: (requireText || `${placeHolder} is required.`) })}>
+            </input>
         </div>
     );
 }
 
 /**
- * A standardized input for user avatars (Profile Picture).
+ * A standard file input for uploading user avatars that's been registered in a form using useForm().
  * @param props 
- * @prop {function} setAvatar - A React state-setting function to set the avatar file object.
+ * @param {UseFormRegister<any>} register - The register function passed by the useForm() hook.
+ * @param {UseFormSetValue<any>} setValue - The setValue function passed by the useForm() hook.
  * @returns 
  */
-export const AvatarInput = (props: { setAvatar: (f: Blob) => void }) => {
-    const avatarDivRef = React.createRef<HTMLDivElement>();
-    const fileInputRef = React.createRef<HTMLInputElement>();
+export const AvatarInput = (
+    props: {
+        base: {
+            regName: string,
+        },
+        register: UseFormRegister<any>,
+        setValue: UseFormSetValue<any>,
+        thisErr: FieldError | undefined
+    }
+) => {
 
+    let { regName } = props.base;
+
+    const fileInputRef = React.createRef<HTMLInputElement>();
     const [m_avatarURL, setAvatarURL] = useState<string>();
-    const [m_avatarUsrIconDisplay, setAvatarUsrIconDisplay] = useState<"hidden" | "">();
+    const [m_avatarUsrIconDisplay, setAvatarUsrIconDisplay] = useState<"hidden" | "">("");
 
     return (
-        <div
-            ref={avatarDivRef}
-            onClick={() => { fileInputRef.current?.click(); }}
-            style={{
-                backgroundImage: `url(${m_avatarURL})`,
-                backgroundSize: 'cover',
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'center',
-            }}
-            className="bg-themeColorUltraLight h-32 w-32 rounded-full hover:cursor-pointer">
+        <div>
+            <div
+                className={"w-24 h-24 bg-themeColor rounded-full justify-center hover:cursor-pointer m-auto"}
+                onClick={() => { fileInputRef.current?.click() }}
+                style={{
+                    backgroundImage: `url(${m_avatarURL})`,
+                    backgroundSize: 'cover',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'center',
+                }}>
 
-            <input
-                type="file"
-                ref={fileInputRef}
-                className="hidden"
-                onChangeCapture={(e: React.FormEvent<HTMLInputElement>) => {
-                    let target = e.target as HTMLInputElement;
-                    if (target.files && target.files.length > 0) {
-                        let fileObj = target.files[0];
-                        props.setAvatar(fileObj);
-                        setAvatarURL(URL.createObjectURL(fileObj));
-                        setAvatarUsrIconDisplay("hidden");
-                    }
-                }}></input>
-            <BiUser className={`w-full h-full p-10 text-white ${m_avatarUsrIconDisplay}`} />
+                {/* Default Icon */}
+                <BiUser className={`w-full h-full text-white p-8 text-2xl ${m_avatarUsrIconDisplay}`}></BiUser>
+
+                {/* File Input */}
+                <input
+                    className={"hidden"}
+                    type="file"
+                    accept="*.png"
+                    {...props.register(regName)}
+                    ref={fileInputRef}
+                    onChangeCapture={(e: React.FormEvent<HTMLInputElement>) => {
+                        let target = e.target as HTMLInputElement;
+                        if (target.files && target.files.length > 0) {
+                            let fileObj = target.files[0];
+                            setAvatarURL(URL.createObjectURL(fileObj));
+                            setAvatarUsrIconDisplay("hidden");
+                            toBase64(fileObj).then((res: string) => { props.setValue("avatarURL", res) });
+                        }
+                    }}>
+                </input>
+            </div>
+            <div className={"text-alertCritical text-sm"}>{props.thisErr?.message}</div>
         </div>
     );
 }
