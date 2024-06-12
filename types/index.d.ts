@@ -36,6 +36,14 @@ export interface IUserRegister {
 }
 
 /**
+ * A generic interface for user signin with password.
+ */
+export interface IUserAuthWihPassword {
+    identity: string,
+    password: string
+}
+
+/**
  * A generic interface for server data.
  */
 export interface IPBErrData {

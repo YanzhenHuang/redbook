@@ -25,7 +25,7 @@ const ParseErrMsg = (e: any): string => {
 }
 
 /**
- * 
+ * Register user using given data.
  * @param {IUserRegister} data - User register data. 
  * @returns 
  */
@@ -51,8 +51,12 @@ export const Register = async (data: IUserRegister): Promise<any | undefined> =>
 
 }
 
-
-export const AuthWithPassword = async (data: IUserAuthWihPassword) => {
+/**
+ * User Login with identity and password.
+ * @param {IUserAuthWihPassword} data - User login data.
+ * @returns 
+ */
+export const AuthWithPassword = async (data: IUserAuthWihPassword): Promise<any | undefined> => {
     try {
         const authData = await pb.collection('users').authWithPassword(data.identity, data.password);
         return authData;
