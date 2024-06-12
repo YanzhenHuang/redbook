@@ -5,12 +5,17 @@ import { Register } from '@/lib/user';
 import { IUserRegister } from '@/types';
 import { AvatarInput, TextInput } from '@/components/uiComponents/Inputs';
 
+
 export const RegForm = () => {
     const { register, setValue, handleSubmit, formState: { errors } } = useForm<IUserRegister>();
 
     const onSubmit: SubmitHandler<IUserRegister> = async (data) => {
-        Register(data);
-        console.log(data);
+        let res = await Register(data);
+        if (res.errcode == 400 || res.errcode == 403) {
+            alert(res.message);
+            return;
+        }
+        alert("Register Success!");
     };
 
     return (

@@ -25,10 +25,21 @@ export interface IFeedsFetch {
 /**
  * A generic interface for a user registration.
  */
-interface IUserRegister {
+export interface IUserRegister {
     username: string;
     email: string;
+    emailVisibility?: boolean;
     password: string;
     passwordConfirm: string;
+    name?: string;
     avatarURL: string;
 }
+
+/**
+ * A generic interface for server data.
+ */
+export interface IPBErrData {
+    errcode: string;
+    message: string;
+}
+
