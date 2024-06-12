@@ -14,6 +14,9 @@ const config: Config = {
         'themeColorModerate': '#6a7fc1',
         'themeColor': '#4a5989',
         'themeColorDark': '#262c40',
+        'alertCritical': '#e82c55',
+        'alertMild': '#e8a951',
+        'alertOK': '#51ad49',
       },
       backgroundImage: {
         'color': 'white',
