@@ -1,6 +1,6 @@
 "use server"
 import { pb } from '@/lib/db_config';
-import { IPBErrData, IUserRegister } from '@/types';
+import { IPBErrData, IUserAuthWihPassword, IUserRegister } from '@/types';
 
 /**
  * Parse error messages into a loose list.
@@ -16,14 +16,10 @@ const ParseErrMsg = (e: any): string => {
     let dataArrKey = Object.keys(e.data.data);
     let errMessages = e.message + "\n";
 
-    if (dataArr.length <= 1) {
-        errMessages += dataArr[0];
-    } else {
-        dataArr.map((data, index) => {
-            let indexNum = (index + 1).toString() + " ";
-            errMessages += indexNum + ". " + dataArrKey[index] + ": " + data.message + "\n";
-        });
-    }
+    dataArr.map((data, index) => {
+        let indexNum = (index + 1).toString() + " ";
+        errMessages += indexNum + ". " + dataArrKey[index] + ": " + data.message + "\n";
+    });
 
     return errMessages;
 }
@@ -48,9 +44,20 @@ export const Register = async (data: IUserRegister): Promise<any | undefined> =>
     try {
         const newUser = await pb.collection("users").create<IUserRegister>(regData);
         return newUser;
-    } catch (e: any) {
-        let errMessages = ParseErrMsg(e) as string;
-        return { errcode: e.data.code, message: errMessages } as IPBErrData;
+    } catch (err: any) {
+        let errMessages = ParseErrMsg(err) as string;
+        return { errcode: err.data.code, message: errMessages } as IPBErrData;
     }
 
+}
+
+
+export const AuthWithPassword = async (data: IUserAuthWihPassword) => {
+    try {
+        const authData = await pb.collection('users').authWithPassword(data.identity, data.password);
+        return authData;
+    } catch (err: any) {
+        let errMessages = ParseErrMsg(err) as string;
+        return { errcode: err.data.code, message: errMessages } as IPBErrData;
+    }
 }
