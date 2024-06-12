@@ -4,9 +4,11 @@ import { TextInput } from "@/components/uiComponents/Inputs";
 import { AuthWithPassword } from "@/lib/user";
 import { IUserAuthWihPassword } from "@/types";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 
 export const SigninForm = () => {
     let { register, setValue, handleSubmit, formState: { errors } } = useForm<IUserAuthWihPassword>();
+    let router = useRouter();
 
     const onSubmit: SubmitHandler<IUserAuthWihPassword> = async (data) => {
         let res = await AuthWithPassword(data);
@@ -14,7 +16,7 @@ export const SigninForm = () => {
         if (res.errcode == 400) {
             alert(res.message);
         }
-        // router.replace("./");
+        router.push("/feeds/1");
     };
 
     return (
