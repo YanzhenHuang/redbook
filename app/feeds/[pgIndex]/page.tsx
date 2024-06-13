@@ -19,22 +19,16 @@ export default async function Home({ params }: any) {
         <Main title={"Feeds"}>
             <Header title={"Feeds"}>
                 <NavUList gap={2}>
-                    <li className={`List-none`}>
-                        <IF condition={session != void 0}>
-                            {session?.user?.name}
-                        </IF>
-                    </li>
-                    <li className={`list-none`}>
-                        <IFELSE condition={!session}>
-                            <Link href="/api/auth/signin">Sign In</Link>
-                            <Link href="/api/auth/signout">Sign Out</Link>
-                        </IFELSE>
-                    </li>
-                    <li className={`list-none`}>
-                        <IF condition={!session}>
-                            <Link href="/user/register">Sign Up</Link>
-                        </IF>
-                    </li>
+                    <IF condition={session != void 0}>
+                        {session?.user?.name}
+                    </IF>
+                    <IFELSE condition={!session}>
+                        <Link href="/api/auth/signin">Sign In</Link>
+                        <Link href="/api/auth/signout">Sign Out</Link>
+                    </IFELSE>
+                    <IF condition={!session}>
+                        <Link href="/user/register">Sign Up</Link>
+                    </IF>
                 </NavUList>
             </Header>
 

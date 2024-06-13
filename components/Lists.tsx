@@ -30,7 +30,7 @@ export const UList = (props: UListProps) => {
     return (
         <ul className={className}>
             {props.children?.map((item: ReactNode, index: Key) => (
-                <li key={index}>{item}</li>
+                <li className={`list-none`} key={index}>{item}</li>
             ))}
         </ul>
     )
