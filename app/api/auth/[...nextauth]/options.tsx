@@ -2,7 +2,7 @@ import type { Awaitable, NextAuthOptions } from "next-auth";
 import GitHubProvider from 'next-auth/providers/github';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { AuthWithPassword } from "@/lib/user";
-import { IUserAuthWihPassword, IUserAuthWithPasswordCallback } from "@/types";
+import { IUserAuthWithPassword, IUserAuthWithPasswordCallback } from "@/types";
 
 export const options: NextAuthOptions = {
     providers: [
@@ -47,4 +47,9 @@ export const options: NextAuthOptions = {
             }
         }),
     ],
+    callbacks: {
+        session({ session, user }) {
+            session.user.id = user.record.id;
+        },
+    }
 };

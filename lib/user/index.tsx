@@ -1,6 +1,6 @@
 "use server"
 import { pb } from '@/lib/db_config';
-import { IPBErrData, IUserAuthWihPassword, IUserRegister } from '@/types';
+import { IPBErrData, IUserAuthWithPassword, IUserAuthWithPasswordCallback, IUserRegister } from '@/types';
 import { cookies } from 'next/headers';
 
 /**
@@ -54,12 +54,12 @@ export const Register = async (data: IUserRegister): Promise<any | undefined> =>
 
 /**
  * User Login with identity and password.
- * @param {IUserAuthWihPassword} data - User login data.
+ * @param {IUserAuthWithPassword} data - User login data.
  * @returns 
  */
-export const AuthWithPassword = async (data: IUserAuthWihPassword): Promise<any | undefined> => {
+export const AuthWithPassword = async (data: IUserAuthWithPassword): Promise<any | undefined> => {
     try {
-        const authData = await pb.collection('users').authWithPassword(data.identity, data.password);
+        const authData = await pb.collection<IUserAuthWithPassword>('users').authWithPassword(data.identity, data.password);
         pb.authStore.save(authData.token, authData.record);
         return authData;
         // return pb.authStore.model;

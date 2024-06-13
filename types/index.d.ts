@@ -40,7 +40,7 @@ export interface IUserRegister {
 /**
  * A generic interface for user signin with password.
  */
-export interface IUserAuthWihPassword {
+export interface IUserAuthWithPassword {
     identity: string;
     password: string;
 }

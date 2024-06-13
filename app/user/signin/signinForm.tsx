@@ -2,15 +2,15 @@
 
 import { TextInput } from "@/components/uiComponents/Inputs";
 import { AuthWithPassword } from "@/lib/user";
-import { IUserAuthWihPassword } from "@/types";
+import { IUserAuthWithPassword } from "@/types";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 
 export const SigninForm = () => {
-    let { register, setValue, handleSubmit, formState: { errors } } = useForm<IUserAuthWihPassword>();
+    let { register, setValue, handleSubmit, formState: { errors } } = useForm<IUserAuthWithPassword>();
     let router = useRouter();
 
-    const onSubmit: SubmitHandler<IUserAuthWihPassword> = async (data) => {
+    const onSubmit: SubmitHandler<IUserAuthWithPassword> = async (data) => {
         let res = await AuthWithPassword(data);
         console.log(res);
         if (res.errcode == 400) {
