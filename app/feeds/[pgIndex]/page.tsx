@@ -29,8 +29,8 @@ export default async function Home({ params }: any) {
                         {session?.user?.name}
                     </IF>
                     <IFELSE condition={!session}>
-                        <Link href="/api/auth/signin">Sign In</Link>
-                        <Link href="/api/auth/signout">Sign Out</Link>
+                        <Link href="/api/auth/signin?callbackUrl=%2Ffeeds%2F1">Sign In</Link>
+                        <Link href="/api/auth/signout?callbackUrl=%2Ffeeds%2F1">Sign Out</Link>
                     </IFELSE>
                     <IF condition={!session}>
                         <Link href="/user/register">Sign Up</Link>
