@@ -22,14 +22,14 @@ export const Feed = (props: { index: number, item: IFeedsFetch, numLikes?: numbe
                 {/* Information */}
                 <div className={"mt-3"}>
                     {/* Title */}
-                    <div className={"pl-4 pr-4 text-clip text-xl"}>
+                    <div className={"pl-4 pr-4 text-clip text-lg"}>
                         {props.item.title}
                     </div>
 
                     {/* Status */}
                     <div className={"mt-1 pl-3.5 pr-3 flex flex-row gap-2 justify-between"}>
                         {/* User Name */}
-                        <div className={'flex flex-row gap-2 items-center'}>
+                        <div className={'flex flex-row gap-2 items-center text-sm'}>
                             <div className={"rounded-full w-6 h-6 bg-themeColorUltraLight"}></div>
                             <div className={"text-gray-500"}>User Name</div>
                         </div>
