@@ -10,6 +10,7 @@ import { getServerSession } from 'next-auth/next';
 import { Header } from '@/components/uiComponents/Header';
 import { NavUList } from '@/components/Lists';
 import Link from 'next/link';
+import { BiPlus } from 'react-icons/bi';
 
 export default async function Home({ params }: any) {
     const session = await getServerSession(options);
@@ -18,7 +19,12 @@ export default async function Home({ params }: any) {
     return (
         <Main title={"Feeds"}>
             <Header title={"Feeds"}>
-                <NavUList gap={2}>
+                <NavUList gap={4}>
+                    <Link
+                        href={"/postFeeds"}
+                        className={"bg-themeColor text-white font-bold rounded-full block pl-2 pr-2 pt-1 pb-1 hover:cursor-pointer hover:bg-themeColorDark hover:scale-[1.02] transition-all"}>
+                        <BiPlus />
+                    </Link>
                     <IF condition={session != void 0}>
                         {session?.user?.name}
                     </IF>
