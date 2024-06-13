@@ -1,3 +1,5 @@
+import { User } from "next-auth";
+
 /**
  * A generic state management interface for React components.
  * @member {T} state - The current state value.
@@ -39,8 +41,25 @@ export interface IUserRegister {
  * A generic interface for user signin with password.
  */
 export interface IUserAuthWihPassword {
-    identity: string,
-    password: string
+    identity: string;
+    password: string;
+}
+
+export interface IUserAuthWithPasswordCallback extends User {
+    token: string;
+    record: {
+        id: string;
+        collectionId: string;
+        collectionName: string;
+        username: string;
+        verified: boolean;
+        emailVisibility: boolean;
+        email: string;
+        created: string;
+        updated: string;
+        name: string;
+        avatarURL: string;
+    };
 }
 
 /**

@@ -64,8 +64,9 @@ export const AuthWithPassword = async (data: IUserAuthWihPassword): Promise<any 
         return authData;
         // return pb.authStore.model;
     } catch (err: any) {
-        let errMessages = ParseErrMsg(err) as string;
-        return { errcode: err.data.code, message: errMessages } as IPBErrData;
+        // let errMessages = ParseErrMsg(err) as string;
+        // return { errcode: err.data.code, message: errMessages } as IPBErrData;
+        return null;
     }
 }
 

@@ -1,6 +1,8 @@
-import type { NextAuthOptions } from "next-auth";
+import type { Awaitable, NextAuthOptions } from "next-auth";
 import GitHubProvider from 'next-auth/providers/github';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { AuthWithPassword } from "@/lib/user";
+import { IUserAuthWihPassword, IUserAuthWithPasswordCallback } from "@/types";
 
 export const options: NextAuthOptions = {
     providers: [
@@ -11,13 +13,13 @@ export const options: NextAuthOptions = {
         CredentialsProvider({
             name: "Credentials",
             credentials: {
-                username: {
-                    label: "Username: ",
+                identity: {
+                    label: "User Name or Email",
                     type: "text",
-                    placeholder: "User Name",
+                    placeholder: "User Name or Email",
                 },
                 password: {
-                    label: "Password: ",
+                    label: "Password",
                     type: "password",
                     placeholder: "Password",
                 },
@@ -25,13 +27,23 @@ export const options: NextAuthOptions = {
             async authorize(credentials: any) {
                 // TODO: Hard coding right now. 
                 // Need to retrieve data from db in the future.
-                const user = { id: "42", name: "Dave", password: "nextauth" };
+                // const user = { id: "42", name: "Dave", password: "nextauth" };
 
-                if (credentials?.username == user.name && credentials?.password === user.password) {
-                    return user;
+                // if (credentials?.username == user.name && credentials?.password === user.password) {
+                //     return user;
+                // } else {
+                //     return null;
+                // }
+
+                // Promise<IUserAuthWithPasswordCallback | undefined >
+
+                const user = await AuthWithPassword(credentials);
+                if (user) {
+                    return { id: user.record.id, name: user.record.username, email: user.record.email };
                 } else {
                     return null;
                 }
+
             }
         }),
     ],
