@@ -39,7 +39,12 @@ export const options: NextAuthOptions = {
 
                 const user = await AuthWithPassword(credentials);
                 if (user) {
-                    return { id: user.record.id, name: user.record.username, email: user.record.email };
+                    return {
+                        id: user.record.id,
+                        name: user.record.username,
+                        email: user.record.email,
+                        avatarURL: user.record.avatarURL
+                    };
                 } else {
                     return null;
                 }
@@ -48,8 +53,11 @@ export const options: NextAuthOptions = {
         }),
     ],
     callbacks: {
-        session({ session, user }) {
-            session.user.id = user.record.id;
-        },
+        // Somehow the subject of the JWT token is the user id.
+        // In this case, pass out the user id as a key for further data retrieval.
+        session({ session, token, user }) {
+            // console.log(token);
+            return { ...session, user: { ...session.user, id: token.sub } };
+        }
     }
 };

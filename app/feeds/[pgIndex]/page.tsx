@@ -26,7 +26,7 @@ export default async function Home({ params }: any) {
                         <BiPlus />
                     </Link>
                     <IF condition={session != void 0}>
-                        {session?.user?.name}
+                        {`${session?.user?.name} ${session?.user?.id}`}
                     </IF>
                     <IFELSE condition={!session}>
                         <Link href="/api/auth/signin?callbackUrl=%2Ffeeds%2F1">Sign In</Link>
