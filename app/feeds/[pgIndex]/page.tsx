@@ -14,8 +14,10 @@ import { BiPlus } from 'react-icons/bi';
 
 export default async function Home({ params }: any) {
     const session = await getServerSession(options);
-
+    const userInfo = session && JSON.parse(session?.user?.name as string);
+    console.log(userInfo);
     let feedsLR = await FetchFeeds();
+
     return (
         <Main title={"Feeds"}>
             <Header title={"Feeds"}>
@@ -25,19 +27,37 @@ export default async function Home({ params }: any) {
                         className={"bg-themeColor text-white font-bold rounded-full block pl-2 pr-2 pt-1 pb-1 hover:cursor-pointer hover:bg-themeColorDark hover:scale-[1.02] transition-all"}>
                         <BiPlus />
                     </Link>
+
+                    {/* User Name */}
                     <IF condition={session != void 0}>
-                        {`${session?.user?.name} ${session?.user?.id}`}
+                        <div>{userInfo?.record.username}</div>
+                        <div className={"hidden"}>{userInfo?.record.id}</div>
                     </IF>
+
+                    {/* User Avatar */}
+                    <IFELSE condition={session != void 0 && userInfo?.record.avatarURL != ""}>
+                        <img
+                            className={"w-10 h-10 object-cover rounded-full"}
+                            src={userInfo?.record.avatarURL} />
+                        <IF condition={session != void 0}>
+                            <div className={"w-10 h-10 object-cover rounded-full bg-themeColorLight"}></div>
+                        </IF>
+                    </IFELSE>
+
+                    {/* Sign In & Sign Out */}
                     <IFELSE condition={!session}>
                         <Link href="/api/auth/signin?callbackUrl=%2Ffeeds%2F1">Sign In</Link>
                         <Link href="/api/auth/signout?callbackUrl=%2Ffeeds%2F1">Sign Out</Link>
                     </IFELSE>
+
+                    {/* Sign Up */}
                     <IF condition={!session}>
                         <Link href="/user/register">Sign Up</Link>
                     </IF>
                 </NavUList>
             </Header>
 
+            {/* <UserCenter id={session?.user?.id}></UserCenter> */}
             <Grid>
                 {feedsLR?.items.map((item, index) => (
                     <Feed key={index} index={index} item={item}></Feed>

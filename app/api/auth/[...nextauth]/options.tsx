@@ -41,7 +41,7 @@ export const options: NextAuthOptions = {
                 if (user) {
                     return {
                         id: user.record.id,
-                        name: user.record.username,
+                        name: JSON.stringify(user),
                         email: user.record.email,
                         avatarURL: user.record.avatarURL
                     };

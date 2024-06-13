@@ -70,6 +70,16 @@ export const AuthWithPassword = async (data: IUserAuthWithPassword): Promise<any
     }
 }
 
+
+export const GetUserInfo = async (id: string): Promise<IUserAuthWithPasswordCallback | null> => {
+    try {
+        const userInfo = await pb.collection<IUserAuthWithPasswordCallback>('users').getOne(id);
+        return userInfo;
+    } catch (err: any) {
+        return null;
+    }
+}
+
 export const ConfirmVerification = async (data: any): Promise<any | undefined> => {
     await pb.collection('users').confirmVerification(data.token);
     await pb.collection('users').authRefresh();
