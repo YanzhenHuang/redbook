@@ -1,19 +1,25 @@
 import { options } from "@/app/api/auth/[...nextauth]/options";
-import { IFELSE, Main } from "@/components/Frames";
+import { IFELSE, IF, Main } from "@/components/Frames";
 import { BASE_FILES } from "@/lib/db_config";
 import { getServerSession } from "next-auth/next";
-import { getFeedInfo } from "@/lib/feeds/index"
+import { DeleteFeed, getFeedInfo } from "@/lib/feeds/index"
 import Link from "next/link";
 import { GetUserInfo } from "@/lib/user";
+import { DeleteFeedButton } from "@/components/uiComponents/Buttons";
 
 export default async function Home({ params }: any) {
+    // Feed user info
     const feed = await getFeedInfo(params.id);
-    const userInfo = await GetUserInfo(feed.uid);
+    const feedUserInfo = await GetUserInfo(feed.uid);
+
+    // Session user info
+    const session = await getServerSession(options);
+    const loginUserInfo = JSON.parse(session?.user.name as string);
 
     return (
         <Main title={`Feed Detail - ${params.id}`}>
 
-            <div className={"absolute top-20 flex flex-col gap-5"}>
+            <div className={"absolute top-20 flex flex-col gap-5 items-center"}>
                 {/* Route Indicator */}
                 <div className={"flex flex-row gap-5 text-3xl font-bold pl-10"}>
                     <Link href={"/feeds/1"}><p className={"text-gray-500"}>Posts /</p></Link>
@@ -30,17 +36,22 @@ export default async function Home({ params }: any) {
                     {/* Right - Content */}
                     <div className={"block rounded-r-2xl bg-white w-[24rem] h-[32rem] pl-10 pr-10 pt-7 pb-7 text-lg overflow-auto"}>
                         <div className={"flex flex-row items-center gap-5"}>
-                            <IFELSE condition={!userInfo || !userInfo.avatarURL}>
+                            <IFELSE condition={!feedUserInfo || !feedUserInfo.avatarURL}>
                                 <div className={"bg-themeColor rounded-full w-10 h-10"}></div>
-                                <img className={"rounded-full w-10 h-10"} src={userInfo?.avatarURL} />
+                                <img className={"rounded-full w-10 h-10"} src={feedUserInfo?.avatarURL} />
                             </IFELSE>
-                            <div className={"text-gray-500 text-md"}><p>{userInfo?.username}</p></div>
+                            <div className={"text-gray-500 text-md"}><p>{feedUserInfo?.username}</p></div>
                         </div>
                         <div className={"mt-4 font-bold text-sm"}>{feed.title}</div>
                         <div className={"mt-4 text-sm"}>{feed.content}</div>
                         <div className={"mt-4 text-gray-500 text-sm"}>{feed.updated}</div>
                     </div>
                 </div>
+
+                {/* Delete Button */}
+                <IF condition={loginUserInfo.record.id === feed.uid}>
+                    <DeleteFeedButton id={feed.id} />
+                </IF>
             </div>
         </Main>
     );

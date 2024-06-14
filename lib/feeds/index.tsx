@@ -8,10 +8,14 @@ export const FetchFeeds = async (): Promise<ListResult<IFeedsFetch>> => {
     });
 }
 
-export const PostFeed = async (data: IFeedPost): Promise<any> => {
+export const PostFeed = async (data: IFeedPost): Promise<IFeedPost> => {
     return pb.collection<IFeedPost>('feeds').create(data);
 }
 
 export const getFeedInfo = async (id: string): Promise<IFeedsFetch> => {
     return pb.collection<IFeedsFetch>('feeds').getOne(id, { expand: 'id,uid,title,content,photo,public,created,updated' });
+}
+
+export const DeleteFeed = async (id: string): Promise<boolean | { code: number, message: string, data: any }> => {
+    return pb.collection('feeds').delete(id);
 }
