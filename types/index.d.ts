@@ -45,21 +45,21 @@ export interface IUserAuthWithPassword {
     password: string;
 }
 
+/**
+ * Current user retrieved from the db.
+ */
 export interface IUserAuthWithPasswordCallback extends User {
-    token: string;
-    record: {
-        id: string;
-        collectionId: string;
-        collectionName: string;
-        username: string;
-        verified: boolean;
-        emailVisibility: boolean;
-        email: string;
-        created: string;
-        updated: string;
-        name: string;
-        avatarURL: string;
-    };
+    id: string;
+    collectionId: string;
+    collectionName: string;
+    username: string;
+    verified: boolean;
+    emailVisibility: boolean;
+    email: string;
+    created: string;
+    updated: string;
+    name: string;
+    avatarURL: string;
 }
 
 /**

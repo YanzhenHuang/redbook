@@ -15,7 +15,6 @@ import { BiPlus } from 'react-icons/bi';
 export default async function Home({ params }: any) {
     const session = await getServerSession(options);
     const userInfo = session && JSON.parse(session?.user?.name as string);
-    console.log(userInfo);
     let feedsLR = await FetchFeeds();
 
     return (
@@ -36,9 +35,11 @@ export default async function Home({ params }: any) {
 
                     {/* User Avatar */}
                     <IFELSE condition={session != void 0 && userInfo?.record.avatarURL != ""}>
-                        <img
-                            className={"w-10 h-10 object-cover rounded-full"}
-                            src={userInfo?.record.avatarURL} />
+                        <Link href={`/user/about/${session?.user.id}`}>
+                            <img
+                                className={"w-10 h-10 object-cover rounded-full"}
+                                src={userInfo?.record.avatarURL} />
+                        </Link>
                         <IF condition={session != void 0}>
                             <div className={"w-10 h-10 object-cover rounded-full bg-themeColorLight"}></div>
                         </IF>
