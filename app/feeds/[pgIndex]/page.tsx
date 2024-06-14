@@ -19,7 +19,7 @@ export default async function Home({ params }: any) {
 
     return (
         <Main title={"Feeds"}>
-            <Header title={"Feeds"}>
+            <Header title={"Feeds"} extraStyle={"fixed z-[99] backdrop-blur-xl bg-[#ffffff80]"}>
                 <NavUList gap={4}>
                     <Link
                         href={"/postFeeds"}
@@ -58,6 +58,7 @@ export default async function Home({ params }: any) {
                 </NavUList>
             </Header>
 
+            <br /><br /><br />
             {/* <UserCenter id={session?.user?.id}></UserCenter> */}
             <Grid>
                 {feedsLR?.items.map((item, index) => (
