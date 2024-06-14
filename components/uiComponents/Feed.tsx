@@ -17,7 +17,9 @@ export const Feed = (props: { index: number, item: IFeedsFetch, numLikes?: numbe
         <div key={props.index} className={"w-56 hover:scale-[1.02] hover:cursor-pointer transition-all"}>
             <Link href={`/feed/${props.item.id}`} className={"w-full h-full"}>
                 {/* Image */}
-                <img src={`${BASE_FILES}/${props.item.id}/${props.item.photo}`} className={"rounded-2xl h-80 object-cover"} />
+                <img
+                    src={props.item.photo ? `${BASE_FILES}/${props.item.id}/${props.item.photo}` : props.item.photoURL}
+                    className={"rounded-2xl h-80 object-cover"} />
 
                 {/* Information */}
                 <div className={"mt-3"}>

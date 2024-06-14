@@ -22,7 +22,20 @@ export interface IFeedsFetch {
     public: boolean;
     created: string;
     updated: string;
+    photoURL: string;
 }
+
+/**
+ * A generic interface for uploading a feed.
+ */
+interface IFeedPost {
+    uid: string;
+    title: string;
+    content: string;
+    public: boolean;
+    photoURL: string;
+};
+
 
 /**
  * A generic interface for a user registration.
