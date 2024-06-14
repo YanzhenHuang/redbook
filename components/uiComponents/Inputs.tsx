@@ -4,6 +4,7 @@ import { BiUser } from 'react-icons/bi';
 import { FieldError, UseFormRegister, UseFormSetValue, useForm } from 'react-hook-form';
 import { toBase64 } from '@/utils/toBase64';
 import { IconType } from 'react-icons';
+import imageCompression from 'browser-image-compression';
 
 export const inputStyle = "border-2 rounded-md p-2 outline-none focus:border-themeColor";
 
@@ -108,13 +109,29 @@ export const AvatarInput = (
                     accept="*.png"
                     {...props.register(regName)}
                     ref={fileInputRef}
-                    onChangeCapture={(e: React.FormEvent<HTMLInputElement>) => {
+                    onChangeCapture={async (e: React.FormEvent<HTMLInputElement>) => {
                         let target = e.target as HTMLInputElement;
                         if (target.files && target.files.length > 0) {
                             let fileObj = target.files[0];
-                            setAvatarURL(URL.createObjectURL(fileObj));
+                            let fileObjCompressed = fileObj;
+
+                            try {
+                                fileObjCompressed = await imageCompression(fileObj, { maxSizeMB: 0.5, maxWidthOrHeight: 100 });
+                                if (fileObjCompressed.size / 1024 / 1024 > 0.5) {
+                                    alert("File should not exceed 0.5MB!");
+                                    return;
+                                }
+                            } catch (err) {
+                                alert("File should not exceed 0.5MB!");
+                                return;
+                            }
+
+                            setAvatarURL(URL.createObjectURL(fileObjCompressed));
+                            console.log(URL.createObjectURL(fileObjCompressed));
                             setAvatarUsrIconDisplay(" hidden");
-                            toBase64(fileObj).then((res: string) => { props.setValue("avatarURL", res) });
+                            toBase64(fileObjCompressed).then((res: string) => {
+                                props.setValue("avatarURL", res);
+                            });
                         }
                     }}>
                 </input>
