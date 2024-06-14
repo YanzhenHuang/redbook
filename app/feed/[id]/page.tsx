@@ -1,18 +1,14 @@
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import { IFELSE, Main } from "@/components/Frames";
-import { BASE_FILES, pb } from "@/lib/db_config";
-import { IFeedsFetch } from "@/types";
+import { BASE_FILES } from "@/lib/db_config";
 import { getServerSession } from "next-auth/next";
+import { getFeedInfo } from "@/lib/feeds/index"
 import Link from "next/link";
-
-const getFeedInfo = async (id: string): Promise<IFeedsFetch> => {
-    return pb.collection<IFeedsFetch>('feeds').getOne(id, { expand: 'id,uid,title,content,photo,public,created,updated' });
-}
+import { GetUserInfo } from "@/lib/user";
 
 export default async function Home({ params }: any) {
-    let feed = await getFeedInfo(params.id);
-    const session = await getServerSession(options);
-    const userInfo = session && JSON.parse(session?.user?.name as string);
+    const feed = await getFeedInfo(params.id);
+    const userInfo = await GetUserInfo(feed.uid);
 
     return (
         <Main title={`Feed Detail - ${params.id}`}>
@@ -34,11 +30,11 @@ export default async function Home({ params }: any) {
                     {/* Right - Content */}
                     <div className={"block rounded-r-2xl bg-white w-[24rem] h-[32rem] pl-10 pr-10 pt-7 pb-7 text-lg overflow-auto"}>
                         <div className={"flex flex-row items-center gap-5"}>
-                            <IFELSE condition={session != void 0}>
-                                <img className={"rounded-full w-10 h-10"} src={userInfo.record.avatarURL} />
+                            <IFELSE condition={!userInfo || !userInfo.avatarURL}>
                                 <div className={"bg-themeColor rounded-full w-10 h-10"}></div>
+                                <img className={"rounded-full w-10 h-10"} src={userInfo?.avatarURL} />
                             </IFELSE>
-                            <div className={"text-gray-500 text-md"}><p>{userInfo?.record.username}</p></div>
+                            <div className={"text-gray-500 text-md"}><p>{userInfo?.username}</p></div>
                         </div>
                         <div className={"mt-4 font-bold text-sm"}>{feed.title}</div>
                         <div className={"mt-4 text-sm"}>{feed.content}</div>
@@ -48,4 +44,5 @@ export default async function Home({ params }: any) {
             </div>
         </Main>
     );
-}   
+}
+
