@@ -73,7 +73,7 @@ export const AuthWithPassword = async (data: IUserAuthWithPassword): Promise<any
 
 export const GetUserInfo = async (id: string): Promise<IUserAuthWithPasswordCallback | null> => {
     try {
-        const userInfo = await pb.collection<IUserAuthWithPasswordCallback>('users').getOne(id);
+        const userInfo = await pb.collection<IUserAuthWithPasswordCallback>('users').getOne(id, { requestKey: null });
         return userInfo;
     } catch (err: any) {
         return null;

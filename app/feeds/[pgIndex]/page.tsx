@@ -64,6 +64,7 @@ export default async function Home({ params }: any) {
                     <Feed key={index} index={index} item={item}></Feed>
                 ))}
             </Grid>
+
         </Main>
     );
 }
