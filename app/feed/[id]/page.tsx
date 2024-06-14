@@ -27,7 +27,9 @@ export default async function Home({ params }: any) {
                 {/* Feed Information */}
                 <div className={"flex flex-row drop-shadow-2xl shadow-black-500/50"}>
                     {/* Left - Image */}
-                    <img src={`${BASE_FILES}/${params.id}/${feed.photo}`} className={"rounded-l-2xl w-[24rem] h-[32rem] object-cover"} />
+                    <img
+                        src={feed.photo ? `${BASE_FILES}/${params.id}/${feed.photo}` : feed.photoURL}
+                        className={"rounded-l-2xl w-[24rem] h-[32rem] object-cover"} />
 
                     {/* Right - Content */}
                     <div className={"block rounded-r-2xl bg-white w-[24rem] h-[32rem] pl-10 pr-10 pt-7 pb-7 text-lg overflow-auto"}>
