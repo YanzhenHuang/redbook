@@ -21,10 +21,11 @@ export const PostFeedForm = (params: { id: string }) => {
             return;
         }
         alert("Post Success!");
+        window.location.href = "/feeds/1";
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} className={"flex flex-col w-96 items-center gap-2"}>
             {/* User ID */}
             <input type={"hidden"} value={id} {...register("uid")} />
 
@@ -36,20 +37,22 @@ export const PostFeedForm = (params: { id: string }) => {
                 thisErr={errors.photoURL} />
 
             {/* Title */}
-            <TextInput
-                base={{ placeHolder: "Title", regName: "title", isRequired: true, }}
-                register={register}
-                thisErr={errors.title} />
+            <input
+                className={`${inputStyle} w-full`}
+                placeholder={"Title"}
+                {...register("title")} />
 
             {/* Content */}
             <textarea
-                className={inputStyle}
+                className={`${inputStyle} w-full`}
                 placeholder={"Content"}
                 {...register("content")} />
 
             {/* Submit */}
-            <input type="submit" className={"bg-themeColor text-white font-bold rounded-full block pl-5 pr-5 pt-2 pb-2 hover:cursor-pointer hover:bg-themeColorDark hover:scale-[1.02] transition-all"} />
-
+            <input
+                type="submit"
+                className={"bg-themeColor text-white font-bold rounded-full block pl-5 pr-5 pt-2 pb-2 hover:cursor-pointer hover:bg-themeColorDark hover:scale-[1.02] transition-all"}
+                value={"Post"} />
         </form>
     );
 }

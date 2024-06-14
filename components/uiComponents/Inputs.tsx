@@ -153,6 +153,7 @@ export const PhotoInput = (
         base: {
             regName: string,
             styles?: string,
+            extraStyles?: string,
             Icon: IconType,
         },
         register: UseFormRegister<any>,
@@ -161,7 +162,8 @@ export const PhotoInput = (
     }
 ) => {
 
-    let { regName, styles, Icon } = props.base;
+    let { regName, styles, extraStyles, Icon } = props.base;
+    const defaultStyle = "w-48 h-32 border border-themeColorLight border-[2.5px] p-3 rounded-lg bg-themeColorUltraLight hover:opacity-80 hover:scale-[1.02] hover:cursor-pointer transition-all ";
 
     const fileInputRef = React.createRef<HTMLInputElement>();
     const [m_photoURL, setPhotoURL] = useState<string>();
@@ -170,7 +172,7 @@ export const PhotoInput = (
     return (
         <div>
             <div
-                className={styles || "w-48 h-32 border border-themeColorLight border-[2.5px] p-3 rounded-lg bg-themeColorUltraLight hover:opacity-80 hover:scale-[1.02] hover:cursor-pointer transition-all"}
+                className={styles || defaultStyle + extraStyles}
                 onClick={() => { fileInputRef.current?.click() }}
                 style={{
                     backgroundImage: `url(${m_photoURL})`,
