@@ -3,10 +3,14 @@ import { options } from "@/app/api/auth/[...nextauth]/options";
 import { IFELSE, Main } from "@/components/Frames";
 import { getServerSession } from "next-auth/next";
 import { GetUserInfo } from '@/lib/user';
+import { FetchFeeds } from '@/lib/feeds';
+import { Grid } from '@/components/Layout';
+import { Feed } from '@/components/uiComponents/Feed';
 
 export default async function About({ params }: any) {
     const { id } = params;
     const userInfo = await GetUserInfo(id);
+    let feedsLR = await FetchFeeds({ number: 1, perPage: 50 }, `uid="${id}"`);
 
     return (
         <Main title={"About"}>
@@ -27,6 +31,13 @@ export default async function About({ params }: any) {
                     </div>
                 </div>
             </div>
+
+            {/* Get all feeds IFeedsFetch where uid=session uid */}
+            <Grid>
+                {feedsLR?.items.map((item, index) => (
+                    <Feed key={index} index={index} item={item}></Feed>
+                ))}
+            </Grid>
         </Main >
     );
 }

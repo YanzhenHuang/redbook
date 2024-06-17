@@ -11,11 +11,12 @@ import { Header } from '@/components/uiComponents/Header';
 import { NavUList } from '@/components/Lists';
 import Link from 'next/link';
 import { BiPlus } from 'react-icons/bi';
+import { PageSelectorList } from '@/components/uiComponents/PageSelector';
 
 export default async function Home({ params }: any) {
     const session = await getServerSession(options);
     const userInfo = session && JSON.parse(session?.user?.name as string);
-    let feedsLR = await FetchFeeds();
+    let feedsLR = await FetchFeeds({ number: params.pgIndex, perPage: 5 });
 
     return (
         <Main title={"Feeds"}>
@@ -58,13 +59,17 @@ export default async function Home({ params }: any) {
                 </NavUList>
             </Header>
 
-            <br /><br /><br />
+            <br /><br /><br /><br />
+
+            <PageSelectorList destination={"/feeds"} numOfPage={feedsLR?.totalPages} />
             {/* <UserCenter id={session?.user?.id}></UserCenter> */}
             <Grid>
                 {feedsLR?.items.map((item, index) => (
                     <Feed key={index} index={index} item={item}></Feed>
                 ))}
             </Grid>
+
+
 
         </Main>
     );
