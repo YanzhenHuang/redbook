@@ -16,7 +16,7 @@ export default async function Home({ params }: any) {
 
     // Session user info
     const session = await getServerSession(options);
-    const loginUserInfo = JSON.parse(session?.user.name as string);
+    const loginUserInfo = session?.user ? JSON.parse(session?.user.name as string) : void 0;
 
     // Replies
     const repliesLR = await FetchReplies(params.id);
@@ -61,7 +61,7 @@ export default async function Home({ params }: any) {
                 </div>
 
                 {/* Delete Button */}
-                <IF condition={loginUserInfo.record.id === feed.uid}>
+                <IF condition={loginUserInfo != void 0 && loginUserInfo.record.id === feed.uid}>
                     <DeleteFeedButton id={feed.id} />
                 </IF>
             </div>

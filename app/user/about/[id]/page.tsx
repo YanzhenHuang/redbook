@@ -6,6 +6,7 @@ import { GetUserInfo } from '@/lib/user';
 import { FetchFeeds } from '@/lib/feeds';
 import { Grid } from '@/components/Layout';
 import { Feed } from '@/components/uiComponents/Feed';
+import { Header } from '@/components/uiComponents/Header';
 
 export default async function About({ params }: any) {
     const { id } = params;
@@ -14,7 +15,9 @@ export default async function About({ params }: any) {
 
     return (
         <Main title={"About"}>
-            <div className={"flex flex-row gap-16 mt-30 relative top-30s"}>
+            <Header title={"About Me"} extraStyle={"fixed"} />
+            <br /><br /><br />
+            <div className={"flex flex-row gap-16 mb-30 relative top-30s"}>
                 {/*!userInfo || !userInfo.record.avatarURL */}
                 <IFELSE condition={!userInfo || !userInfo.avatarURL}>
                     <div className={"w-40 h-40 object-cover rounded-full bg-themeColorLight"} />
@@ -32,6 +35,7 @@ export default async function About({ params }: any) {
                 </div>
             </div>
 
+            <br />
             {/* Get all feeds IFeedsFetch where uid=session uid */}
             <Grid>
                 {feedsLR?.items.map((item, index) => (
