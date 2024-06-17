@@ -1,11 +1,11 @@
 import { pb } from "@/lib/db_config";
 import { ListResult } from "pocketbase";
-import { IFeedPost, IFeedsFetch } from "@/types";
+import { IFeedPost, IFeedsFetch, IReplyFetch } from "@/types";
 
 export const FetchFeeds = async (range?: { number: number, perPage: number }, filter?: string): Promise<ListResult<IFeedsFetch>> => {
-    let { number: from, perPage: to } = range || { number: 1, perPage: 50 };
+    let { number, perPage } = range || { number: 1, perPage: 50 };
 
-    return pb.collection<IFeedsFetch>('feeds').getList(from, to, {
+    return pb.collection<IFeedsFetch>('feeds').getList(number, perPage, {
         sort: "-created",
         filter: filter || "public=true || public=false"
     });
@@ -21,4 +21,13 @@ export const getFeedInfo = async (id: string): Promise<IFeedsFetch> => {
 
 export const DeleteFeed = async (id: string): Promise<boolean | { code: number, message: string, data: any }> => {
     return pb.collection('feeds').delete(id);
+}
+
+export const FetchReplies = async (fid: string, range?: { number: number, perPage: number }, filter?: string): Promise<ListResult<IReplyFetch>> => {
+    let { number, perPage } = range || { number: 1, perPage: 50 };
+
+    return pb.collection<IReplyFetch>('replies').getList(number, perPage, {
+        sort: "-created",
+        filter: `fid="${fid}" ${filter || ""}`
+    })
 }

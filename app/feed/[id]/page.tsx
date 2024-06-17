@@ -2,10 +2,12 @@ import { options } from "@/app/api/auth/[...nextauth]/options";
 import { IFELSE, IF, Main } from "@/components/Frames";
 import { BASE_FILES } from "@/lib/db_config";
 import { getServerSession } from "next-auth/next";
-import { DeleteFeed, getFeedInfo } from "@/lib/feeds/index"
+import { DeleteFeed, FetchReplies, getFeedInfo } from "@/lib/feeds/index"
 import Link from "next/link";
 import { GetUserInfo } from "@/lib/user";
 import { DeleteFeedButton } from "@/components/uiComponents/Buttons";
+import { UList } from "@/components/Lists";
+import { Reply } from "./replies";
 
 export default async function Home({ params }: any) {
     // Feed user info
@@ -15,6 +17,9 @@ export default async function Home({ params }: any) {
     // Session user info
     const session = await getServerSession(options);
     const loginUserInfo = JSON.parse(session?.user.name as string);
+
+    // Replies
+    const repliesLR = await FetchReplies(params.id);
 
     return (
         <Main title={`Feed Detail - ${params.id}`}>
@@ -43,8 +48,15 @@ export default async function Home({ params }: any) {
                             <div className={"text-gray-500 text-md"}><p>{feedUserInfo?.username}</p></div>
                         </div>
                         <div className={"mt-4 font-bold text-sm"}>{feed.title}</div>
-                        <div className={"mt-4 text-sm"}>{feed.content}</div>
+                        <div className={"mt-4 text-base"}>{feed.content}</div>
                         <div className={"mt-4 text-gray-500 text-sm"}>{feed.updated}</div>
+
+                        {/* Replies */}
+                        <UList flexDirection={"col"} l_className={"justify-left mt-4"} gap={4}>
+                            {repliesLR?.items.map((item, index) => (
+                                <Reply key={index} item={item} index={index} />
+                            ))}
+                        </UList>
                     </div>
                 </div>
 

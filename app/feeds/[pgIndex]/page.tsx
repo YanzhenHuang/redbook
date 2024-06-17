@@ -21,7 +21,7 @@ export default async function Home({ params }: any) {
     return (
         <Main title={"Feeds"}>
             <Header title={"Feeds"} extraStyle={"fixed z-[99] backdrop-blur-xl bg-[#ffffff80]"}>
-                <NavUList gap={4}>
+                <NavUList gap={4} l_className={"items-center"}>
                     <Link
                         href={"/postFeeds"}
                         className={"bg-themeColor text-white font-bold rounded-full block pl-2 pr-2 pt-1 pb-1 hover:cursor-pointer hover:bg-themeColorDark hover:scale-[1.02] transition-all"}>

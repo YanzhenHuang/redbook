@@ -36,6 +36,22 @@ interface IFeedPost {
     photoURL: string;
 };
 
+/**
+ * A generic interface for a reply item.
+ */
+interface IReplyFetch {
+    id: string;
+    fid: string;
+    uid: string;
+    content: string;
+    created: string;
+    updated: string;
+};
+
+/**
+ * A generic interface for uploading a reply.
+ */
+interface IReplyPost { };
 
 /**
  * A generic interface for a user registration.
