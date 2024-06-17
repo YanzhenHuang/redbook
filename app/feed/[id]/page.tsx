@@ -2,7 +2,7 @@ import { options } from "@/app/api/auth/[...nextauth]/options";
 import { IFELSE, IF, Main } from "@/components/Frames";
 import { BASE_FILES } from "@/lib/db_config";
 import { getServerSession } from "next-auth/next";
-import { DeleteFeed, FetchReplies, getFeedInfo } from "@/lib/feeds/index"
+import { FetchReplies, getFeedInfo } from "@/lib/feeds/index"
 import Link from "next/link";
 import { GetUserInfo } from "@/lib/user";
 import { DeleteFeedButton } from "@/components/uiComponents/Buttons";
@@ -32,14 +32,14 @@ export default async function Home({ params }: any) {
                 </div>
 
                 {/* Feed Information */}
-                <div className={"flex flex-row drop-shadow-2xl shadow-black-500/50"}>
+                <div className={"flex md:flex-row sm:flex-col drop-shadow-2xl shadow-black-500/50"}>
                     {/* Left - Image */}
                     <img
                         src={feed.photo ? `${BASE_FILES}/${params.id}/${feed.photo}` : feed.photoURL}
-                        className={"rounded-l-2xl w-[24rem] h-[32rem] object-cover"} />
+                        className={"md:rounded-tr-none md:rounded-l-2xl  sm:rounded-t-2xl w-[24rem] h-[32rem] object-cover"} />
 
                     {/* Right - Content */}
-                    <div className={"block rounded-r-2xl bg-white w-[24rem] h-[32rem] pl-10 pr-10 pt-7 pb-7 text-lg overflow-auto"}>
+                    <div className={"block md:rounded-bl-none md:rounded-r-2xl sm:rounded-b-2xl bg-white w-[24rem] h-[32rem] pl-10 pr-10 pt-7 pb-7 text-lg overflow-auto"}>
                         <div className={"flex flex-row items-center gap-5"}>
                             <IFELSE condition={!feedUserInfo || !feedUserInfo.avatarURL}>
                                 <div className={"bg-themeColor rounded-full w-10 h-10"}></div>
